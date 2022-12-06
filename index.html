@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Wbsite1(Newbie) with Bootsrap</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+	<link href="style.css" rel="stylesheet">
+	<link rel="icon" type="image/x-icon" href="./img/logo.png">
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<script src='https://code.jquery.com/ui/1.11.3/jquery-ui.js'></script>
+	<script  src="./script.js"></script>
+</head>
+<body class="bg-dark">
+
+<div class="container-background">
+	<!--- Welcome Section -->
+	<div class="container-fluid padding">
+		<div class="row welcome text-center">
+			<div class="col-12">
+				<h1 class="display-4">Mancala</h1>
+			</div>
+			<hr>
+			<div class="col-12">
+				<p class="lead">Mancala, from the arabic word which means "to move" is a game from Africa/Asia.</p>
+				<p class="lead">Choose an option to play!</p>
+			</div>
+		</div>
+	</div>
+
+	<!--- Three Column Section -->
+	<div class="container-fluid padding">
+		<div class="row text-center padding">
+			<div class="col-xs-12 col-sm-6 col-md-4">
+				<button class="svg-play-button" id="game-vs">
+					<svg class="svg-play" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+						<path style="fill:#3C66B1;" d="M256,0c-38.961,0-85.921,14.775-85.921,14.775C70.956,50.084,0,144.756,0,256
+							c0,141.385,114.615,256,256,256s256-114.615,256-256S397.385,0,256,0z M256,462.352c-113.965,0-206.352-92.387-206.352-206.352
+							S142.035,49.648,256,49.648S462.352,142.035,462.352,256S369.965,462.352,256,462.352z"/>
+						<circle style="fill:#52A2E7;" cx="256" cy="256" r="221.978"/>
+						<g>
+							<path style="opacity:0.22;fill:#3C66B1;enable-background:new    ;" d="M404.465,47.428
+								c29.859,41.873,47.427,93.116,47.427,148.464c0,141.385-114.615,256-256,256c-55.348,0-106.592-17.568-148.465-47.427
+								C93.842,469.555,169.963,512,256,512c141.385,0,256-114.615,256-256C512,169.963,469.555,93.842,404.465,47.428z"/>
+							<polygon style="fill:#3C66B1;" points="213.706,178.212 213.706,141.108 372.298,250.017 213.706,358.925 213.706,246.997 	"/>
+						</g>
+					</svg>
+					<h3>VS</h3>
+					<p>Play against your friends</p>
+				</button>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-4">
+				<button class="svg-play-button" id="game-solo">
+					<svg class="svg-play" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+						<path style="fill:#EEBF70;" d="M458.309,256.17c14.304-15.151,23.09-35.567,23.09-58.049c0-44.635-34.568-81.197-78.394-84.373
+							l-0.002,0.002c2.114-6.936,3.262-14.294,3.262-21.921c0-41.495-33.638-75.133-75.133-75.133C289.638,16.696,256,50.334,256,91.828
+							c0-41.494-33.638-75.133-75.133-75.133c-41.495,0-75.133,33.638-75.133,75.133c0,7.628,1.149,14.985,3.262,21.921l-0.002-0.002
+							c-43.826,3.177-78.394,39.739-78.394,84.374c0,22.481,8.785,42.898,23.09,58.049l-0.188-0.174
+							c-14.204,15.132-22.902,35.491-22.902,57.882c0,44.641,34.583,81.179,78.415,84.349l-0.033,0.021
+							c-2.113,6.935-3.249,14.297-3.249,21.923c0,41.495,33.638,75.133,75.133,75.133C222.362,495.304,256,461.666,256,420.172
+							c0,41.494,33.638,75.133,75.133,75.133c41.495,0,75.133-33.638,75.133-75.133c0-7.627-1.136-14.987-3.249-21.922l-0.033-0.021
+							c43.832-3.17,78.415-39.708,78.415-84.349c0-22.391-8.698-42.75-22.901-57.882L458.309,256.17z"/>
+						<path style="fill:#E79C25;" d="M458.309,256.17c14.304-15.151,23.09-35.567,23.09-58.049c0-44.635-34.568-81.197-78.394-84.373
+							l-0.002,0.002c2.114-6.936,3.262-14.294,3.262-21.921c0-41.495-33.638-75.133-75.133-75.133C289.638,16.696,256,50.334,256,91.828
+							v328.342c0,41.495,33.638,75.134,75.133,75.134c41.495,0,75.133-33.638,75.133-75.133c0-7.627-1.136-14.987-3.249-21.922
+							l-0.033-0.021c43.832-3.17,78.415-39.708,78.415-84.349c0-22.391-8.698-42.75-22.901-57.882L458.309,256.17z"/>
+						<path style="fill:#F3D49D;" d="M498.095,198.122c0-25.762-9.68-50.313-27.257-69.131c-13.197-14.129-29.915-24.04-48.274-28.848
+							c0.253-2.749,0.397-5.521,0.397-8.313C422.962,41.194,381.768,0,331.133,0C300.099,0,272.631,15.49,256,39.129
+							C239.369,15.49,211.901,0,180.867,0c-50.635,0-91.828,41.194-91.828,91.828c0,2.794,0.145,5.565,0.397,8.313
+							c-18.359,4.808-35.075,14.719-48.274,28.848c-17.578,18.819-27.257,43.37-27.257,69.132c0,21.486,6.731,41.427,18.185,57.837
+							c-11.804,16.895-18.185,37.001-18.185,57.919c0,46.95,32.11,86.538,75.522,97.967c-0.249,2.761-0.39,5.537-0.39,8.327
+							c0,50.635,41.194,91.828,91.828,91.828c31.035,0,58.503-15.49,75.133-39.129C272.631,496.51,300.099,512,331.133,512
+							c50.635,0,91.828-41.194,91.828-91.828c0-2.788-0.14-5.565-0.39-8.327c43.412-11.429,75.522-51.016,75.522-97.967
+							c0-20.919-6.382-41.025-18.185-57.919C491.365,239.549,498.095,219.608,498.095,198.122z M396.801,381.779
+							c-19.137,0-37.486-8.141-50.343-22.337L321.71,381.86c17.494,19.314,41.809,31.107,67.616,33.028
+							c0.157,1.751,0.245,3.513,0.245,5.284c0,32.223-26.216,58.437-58.437,58.437s-58.438-26.214-58.438-58.437V303.181h-33.391v116.991
+							c0,32.223-26.215,58.437-58.437,58.437s-58.437-26.216-58.437-58.437c0-1.771,0.088-3.532,0.245-5.284
+							c25.807-1.92,50.123-13.714,67.616-33.028l-24.749-22.417c-12.857,14.195-31.206,22.337-50.343,22.337
+							c-37.442,0-67.902-30.461-67.902-67.901c0-11.892,3.075-23.392,8.834-33.519c16.639,11.985,37.042,19.055,59.068,19.055v-33.391
+							c-37.442,0-67.902-30.461-67.902-67.901c0-31.399,21.722-58.325,51.228-65.815c10.151,20.567,27.843,37.177,50.093,45.523
+							l11.728-31.264c-22.678-8.507-37.916-30.504-37.916-54.737c0-32.223,26.216-58.437,58.437-58.437s58.437,26.216,58.437,58.437
+							v116.99h33.391V91.828c0-32.223,26.216-58.437,58.437-58.437s58.437,26.214,58.437,58.437c0,24.232-15.238,46.229-37.916,54.737
+							l11.728,31.264c22.251-8.347,39.942-24.957,50.094-45.523c29.506,7.491,51.228,34.416,51.228,65.815
+							c0,37.441-30.461,67.901-67.902,67.901v33.391c22.026,0,42.429-7.071,59.068-19.055c5.759,10.128,8.834,21.628,8.834,33.519
+							C464.703,351.32,434.243,381.779,396.801,381.779z"/>
+						<path style="fill:#EEBF70;" d="M498.095,198.122c0-25.762-9.68-50.313-27.257-69.131c-13.197-14.129-29.915-24.04-48.274-28.848
+							c0.253-2.749,0.397-5.521,0.397-8.313C422.962,41.194,381.768,0,331.133,0C300.099,0,272.631,15.49,256,39.129v169.69h16.696V91.828
+							c0-32.223,26.216-58.437,58.437-58.437s58.437,26.214,58.437,58.437c0,24.232-15.238,46.229-37.916,54.737l11.728,31.264
+							c22.251-8.347,39.942-24.957,50.094-45.523c29.506,7.491,51.228,34.416,51.228,65.815c0,37.441-30.461,67.901-67.902,67.901v33.391
+							c22.026,0,42.429-7.071,59.068-19.055c5.759,10.128,8.834,21.628,8.834,33.519c0,37.442-30.461,67.901-67.902,67.901
+							c-19.137,0-37.486-8.141-50.343-22.337L321.71,381.86c17.494,19.314,41.809,31.107,67.616,33.028
+							c0.157,1.751,0.245,3.513,0.245,5.284c0,32.223-26.216,58.437-58.437,58.437s-58.438-26.214-58.438-58.437V303.181H256v169.69
+							C272.631,496.51,300.099,512,331.133,512c50.635,0,91.828-41.194,91.828-91.828c0-2.788-0.14-5.565-0.39-8.327
+							c43.412-11.429,75.522-51.016,75.522-97.967c0-20.919-6.382-41.025-18.185-57.919C491.365,239.549,498.095,219.608,498.095,198.122z
+							"/>
+						<path style="fill:#B5E45F;" d="M343.088,225.515v-33.391h-23.211v-23.211h-33.391v23.211h-13.789v-23.211h-33.391v23.211h-13.789
+							v-23.211h-33.391v23.211h-23.211v33.391h23.211v13.79h-23.211v33.391h23.211v13.789h-23.211v33.391h23.211v23.211h33.391v-23.211
+							h13.789v23.211h33.391v-23.211h13.789v23.211h33.391v-23.211h23.211v-33.391h-23.211v-13.789h23.211v-33.391h-23.211v-13.79H343.088
+							z"/>
+						<g>
+							<path style="fill:#7DBB4E;" d="M343.088,225.515v-33.391h-23.211v-23.211h-33.391v23.211h-13.789v-23.211H256v174.175h16.696
+								v-23.211h13.789v23.211h33.391v-23.211h23.211v-33.391h-23.211v-13.788h23.211v-33.391h-23.211v-13.79H343.088z"/>
+							<rect x="225.514" y="225.514" style="fill:#7DBB4E;" width="60.969" height="60.969"/>
+						</g>
+						<rect x="256" y="225.514" style="fill:#588D3F;" width="30.485" height="60.969"/>
+					</svg>
+					<h3>AI</h3>
+					<p>Play against the Computer</p>
+				</button>
+			</div>
+			<div  class="col-xs-12 col-md-4">
+				<button class="svg-play-button" id="game-simulation">
+					<svg class="svg-play" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+						<g>
+							
+								<rect x="19.402" y="399.134" transform="matrix(-0.6271 0.779 -0.779 -0.6271 450.9336 646.5141)" style="fill:#E7ECED;" width="102.61" height="64.132"/>
+							
+								<rect x="390.003" y="399.085" transform="matrix(0.6271 0.779 -0.779 0.6271 500.4277 -182.9731)" style="fill:#E7ECED;" width="102.61" height="64.132"/>
+						</g>
+						<path style="fill:#989EA3;" d="M231.3,200.972l24.694-30.681L373.388,24.465c0,0,12.064-14.981,27.045-2.917
+							c14.994,12.052,2.929,27.045,2.929,27.045L280.29,201.486l-24.489,30.412l-69.586,86.455c35.332,39.058,35.654,98.892,1.58,141.227
+							l-59.949-48.258l-49.954-40.215L17.944,322.85c9.97-12.373,22.035-22.189,35.255-29.242c31.979-17.049,70.716-17.897,103.042,0.617
+							L231.3,200.972z"/>
+						<g>
+							<path style="fill:#AFB6BB;" d="M255.994,170.291L231.3,200.972L108.639,48.593c0,0-12.064-14.994,2.929-27.045
+								c14.981-12.064,27.045,2.917,27.045,2.917L255.994,170.291z"/>
+							<path style="fill:#AFB6BB;" d="M458.802,293.608c13.221,7.054,25.285,16.87,35.255,29.242l-59.949,48.258l-49.954,40.215
+								l-59.949,48.258c-34.073-42.335-33.752-102.168,1.58-141.227l-68.879-85.569l-1.105-0.887l24.489-30.412l2.313,1.863l73.157,90.875
+								C388.086,275.71,426.836,276.558,458.802,293.608z"/>
+						</g>
+						<path d="M512,452.499l-64.344-79.927l59.953-48.262l-6.049-7.507c-7.578-9.402-16.326-17.507-26.075-24.253l0.721-0.581
+							l-12.867-6.862c0,0-0.001,0-0.001-0.001l0,0h-0.001c-33.481-17.858-72.153-18.862-105.037-3.093l-65.233-81.033L410.87,54.633
+							c0.741-0.922,4.52-5.881,6.067-12.998c2.288-10.533-1.429-20.333-10.46-27.593c-9.028-7.271-19.396-8.806-29.195-4.323
+							c-6.622,3.03-10.658,7.78-11.401,8.702L255.999,154.927L146.118,18.421c-7.281-9.04-24.097-17.665-40.587-4.384
+							c-9.039,7.264-12.756,17.066-10.466,27.599c1.547,7.117,5.326,12.076,6.068,13l117.8,146.34l-65.231,81.037
+							c-31.009-14.87-67.171-14.822-99.278,0.212l-0.143-0.114l-5.523,2.946c-0.031,0.017-0.062,0.032-0.093,0.049l-0.003,0.001
+							c-14.759,7.873-27.62,18.539-38.223,31.698l-6.049,7.507l59.953,48.262L0,452.499L64.967,504.8l64.344-79.93l59.949,48.259
+							l6.042-7.507c17.912-22.256,27.631-49.947,27.365-77.975c-0.24-25.441-8.702-49.787-23.984-69.417l57.316-71.203l57.314,71.203
+							c-15.282,19.632-23.743,43.977-23.984,69.417c-0.266,28.027,9.454,55.72,27.365,77.974l6.042,7.507l59.949-48.259l64.345,79.93
+							L512,452.499z M116.217,42.642c-2.692-3.524-4.636-8.742,1.394-13.588c6.023-4.848,10.704-1.836,13.496,1.453l112.522,139.789
+							l-12.323,15.309L116.217,42.642z M62.04,477.702l-34.942-28.13l52.259-64.915l34.942,28.128L62.04,477.702z M179.07,324.817
+							c30.058,33.228,32.454,82.727,6.93,120.946L31.831,321.66c6.127-6.343,12.966-11.838,20.445-16.425l102.676,82.643l12.084-15.014
+							l-95.502-76.868c26.65-9.529,55.625-7.322,79.917,6.59l7.138,4.088L380.892,30.508c0.017-0.021,1.844-2.09,4.409-3.265
+							c2.157-0.988,4.925-1.543,9.094,1.814c6.023,4.841,4.079,10.059,1.461,13.492L173.551,318.718L179.07,324.817z M332.93,324.817
+							l5.517-6.099l-70.078-87.059l12.325-15.311l72.715,90.326l7.137-4.088c24.297-13.916,53.271-16.126,79.919-6.591l-95.504,76.869
+							l12.084,15.014l102.659-82.63c7.48,4.587,14.332,10.068,20.461,16.411L325.999,445.763
+							C300.477,407.544,302.873,358.045,332.93,324.817z M432.645,384.657l52.259,64.915l-34.942,28.13l-52.259-64.917L432.645,384.657z"
+							/>
+					</svg>
+					<h3>Simulation</h3>
+					<p>Watch a game Simulation</p>
+				</button>
+			</div>
+		</div>
+		<div class="row text-center padding">
+			<div id="container-game">
+				<canvas id="myCanvas" style="border:1px solid #d3d3d3;">
+					Your browser does not support the HTML canvas tag.</canvas>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--- Two Column Section -->
+<div class="container-fluid padding bg-dark">
+	<div class="row padding">
+		<div class="col-lg-6">
+			<h2>Rules</h2>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In aliquam at mi eget luctus. Morbi sit amet neque tortor. Ut placerat tortor a tempor vehicula.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In aliquam at mi eget luctus. Morbi sit amet neque tortor. Ut placerat tortor a tempor vehicula.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In aliquam at mi eget luctus. Morbi sit amet neque tortor. Ut placerat tortor a tempor vehicula.</p>
+			<br>
+			<a href="https://en.wikipedia.org/wiki/Mancala" class="btn btn-primary">Learn More</a>
+		</div>
+		<div class="col-lg-6">
+			<img src="img/gif/mancala.gif" class="img-fluid">
+		</div>
+	</div>
+</div>
+<hr class="my-4 hr-light">
+<!--- Fixed background -->
+<figure>
+	<div class="fixed-wrap">
+		<div id="fixed">
+			<div class="curtain"> </div>
+		</div>
+	</div>
+</figure>
+
+<!--- Meet the team -->
+<div class="container-fluid padding">
+	<div class="row welcome text-center">
+		<div class="col-12">
+			<h1 class="display-4">About the Project</h1>
+		</div>
+	</div>
+	<hr class="hr-light">
+</div>
+
+<!--- Cards -->
+<div class="container-fluid padding">
+	<div class="row padding">
+		<div class="col-md-4">
+			<div class="card text-white bg-secondary">
+				<img class="card-img-top" src="img/gif/algos.gif">
+				<div class="card-body">
+					<h4 class="card-title">Game Tree</h4>
+					<details class="class-text mb-2">
+						<summary>About Python Game Tree simulations</summary>
+						This program, developed in python uses pygame library to simulate 3 algorithms:
+						<ul>
+							<li>Min Max</li>
+							<li>Nega Max</li>
+							<li>Alpha Beta Prouning</li>
+						</ul>
+					</details>
+					<a href="#" class="btn btn-outline-light">See Project</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="card text-white bg-secondary">
+				<img class="card-img-top" src="img/gif/mancala-jupyter.gif">
+				<div class="card-body">
+					<h4 class="card-title">Python Mancala</h4>
+					<details class="class-text mb-2">
+						<summary>Mancala Developed in Python</summary>
+						This program allows you to play Mancala.
+						<br>
+						It also has an IA that can play against you!
+					</details>
+					<a href="#" class="btn btn-outline-light">See Profile</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="card text-white bg-secondary">
+				<img class="card-img-top" src="img/gif/simulations.gif">
+				<div class="card-body">
+					<h4 class="card-title">Simulations</h4>
+					<details class="class-text mb-2">
+						<summary>Simulations</summary>
+						...
+					</details>
+					<a href="#" class="btn btn-outline-light">See Profile</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+<!--- Connect -->
+<div class="container-fluid padding">
+	<div class="row text-center padding">
+		<div class="col-12">
+			<h2>Share</h2>
+		</div>
+		<div class="col-12 social padding">
+			<a href="#"><i class="fab fa-facebook"></i></a>
+			<a href="#"><i class="fab fa-twitter"></i></a>
+			<a href="#"><i class="fab fa-google-plus-g"></i></a>
+			<a href="#"><i class="fab fa-instagram"></i></a>
+			<a href="#"><i class="fab fa-youtube"></i></a>
+		</div>
+	</div>
+</div>
+
+<!--- Footer -->
+<footer>
+	<div class="container-fluid padding">
+		<div class="row text-center">
+			<div class="col-md-4">
+				<img style="max-width: 100px" src="img/logo.png">
+				<hr class="light">
+				<p>email@gmail.com</p>
+				<p>1500-117</p>
+			</div>
+			<div class="col-md-4">
+				<hr class="light">
+				<h5>INFO</h5>
+				<hr class="light">
+				<p>Uni</p>
+			</div>
+			<div class="col-md-4">
+				<hr class="light">
+				<h5>Log</h5>
+				<hr class="light">
+				<p>v1.3 7/12/2022</p>
+				<p>v1.2 29/11/2022</p>
+				<p>v1.1 10/10/2022</p>
+			</div>
+			<div class="col-12">
+				<hr class="light-100">
+				<h5>&copy; mancala.com</h5>
+			</div>
+		</div>
+	</div>
+</footer>
+
+
+
+</body>
+</html>
+
+
+
