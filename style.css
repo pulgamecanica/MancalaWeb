@@ -114,17 +114,31 @@ hr.light-100 {
   margin-bottom: 1rem;
 }
 #container-game {
-  min-height: 80vh;
+  position: relative;
+
   width: 100%;
   display: none;
   flex-wrap: nowrap;
   justify-content: center;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 #container-game canvas {
-  height: 800;
-  width: auto;
+  margin: auto;
+  width: 80%;
+  height: auto;
   background-color: rgba(25, 122, 242, 0.5);
+}
+#game-title {
+  color: lightgoldenrodyellow;
+}
+#game-close {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  left: 10px;
+  top: 0;
+  padding: 0.25rem;
+  fill: #007bff;
 }
 
 /*---Media Queries --*/

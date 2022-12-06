@@ -8,23 +8,29 @@ $(document).ready(function() {
     $('#game-simulation').click(function(event) {
       startGame(3)
     });
+    $('#game-close').click(function(event) {
+      closeGame();
+    });
 });
 
-const titleSolo = $("<h1> Play Solo </h1>")
-const titleVs = $("<h1> Play vs </h1>")
-const titleSimulation = $("<h1> Play Simulation </h1>")
 
 function setTitle(option) {
   if (option == 1) {
-    $('#container-game').append(titleSolo);
+    $("#game-title").text("Play Solo");
   } else if (option == 2) {
-    $('#container-game').append(titleVs);
+    $("#game-title").text("Play VS");
   } else if (option == 3) {
-    $('#container-game').append(titleSimulation);
+    $("#game-title").text("Play Simulation");
   }
 }
 
+function closeGame() {
+  $('#container-game').css("display", "none");
+  $('#game-options').css("display", "flex");
+}
+
 function startGame(option) {
+  $('#game-options').css("display", "none");
   $('#container-game').css("display", "flex");
   setTitle(option);
 }
