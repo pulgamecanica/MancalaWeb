@@ -13,7 +13,6 @@ $(document).ready(function() {
     });
 });
 
-
 function setTitle(option) {
   if (option == 1) {
     $("#game-title").text("Play Solo");

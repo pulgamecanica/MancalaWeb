@@ -115,7 +115,6 @@ hr.light-100 {
 }
 #container-game {
   position: relative;
-
   width: 100%;
   display: none;
   flex-wrap: nowrap;
@@ -124,10 +123,12 @@ hr.light-100 {
 }
 #container-game canvas {
   margin: auto;
-  width: 80%;
+  /*width: 80%;*/
   height: auto;
   background-color: rgba(25, 122, 242, 0.5);
+  cursor: url("./img/cursor1.png"), auto;
 }
+
 #game-title {
   color: lightgoldenrodyellow;
 }
