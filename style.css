@@ -116,7 +116,7 @@ hr.light-100 {
 #container-game {
   position: relative;
   width: 100%;
-  display: none;
+  /*display: none;*/
   flex-wrap: nowrap;
   justify-content: center;
   flex-direction: column;
