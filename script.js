@@ -15,11 +15,11 @@ $(document).ready(function() {
 
 function setTitle(option) {
   if (option == 1) {
-    $("#game-title").text("Play Solo");
-  } else if (option == 2) {
     $("#game-title").text("Play VS");
+  } else if (option == 2) {
+    $("#game-title").text("Play AI");
   } else if (option == 3) {
-    $("#game-title").text("Play Simulation");
+    $("#game-title").text("Simulation");
   }
 }
 
