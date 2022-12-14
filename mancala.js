@@ -407,17 +407,12 @@ $(document).ready(function() {
 		update(x, y) {
 			if (this.originalGame.turnTypeHuman() && x != null && y != null) {
 				let fosse = null;
-				this.originalGame.state.PLAYER_1_PITS.forEach((val, i) => {
+				this.originalGame.possibleMoves().forEach((val, i) => {
 					if (this.originalGame.state.board[val].hoverCircle({x: x, y: y})) {
 						fosse = this.originalGame.state.board[val];
 					}
 				});
-				this.originalGame.state.PLAYER_2_PITS.forEach((val, i) => {
-					if (this.originalGame.state.board[val].hoverCircle({x: x, y: y})) {
-						fosse = this.originalGame.state.board[val];
-					}
-				});
-				if (fosse) {
+				if (fosse != null) {
 					let turn = this.originalGame.doMove(fosse.id)
 					if (turn != null) {
 						this.originalGame.playerTurn = turn;
