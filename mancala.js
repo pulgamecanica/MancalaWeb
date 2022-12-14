@@ -512,7 +512,7 @@ $(document).ready(function() {
 		}
 		if (p.originalGame.player1Human && p.originalGame.player1Human) {
 			$("#stats-subtitle").text("Human VS Human");
-		} else if (!p.originalGame.player1Human || !p.originalGame.player1Human) {
+		} else if (!p.originalGame.player1Human || !p.originalGame.player2Human) {
 			$("#stats-subtitle").text("AI VS Human");
 		} else {
 			$("#stats-subtitle").text("Simulation");
