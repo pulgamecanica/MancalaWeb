@@ -510,12 +510,12 @@ $(document).ready(function() {
 			$('#close-stats').css("display", "block");
 			$("#stats-title").text("No Contest!");
 		}
-		if (p.originalGame.player1Human && p.originalGame.player1Human) {
+		if (p.originalGame.player1Human && p.originalGame.player2Human) {
 			$("#stats-subtitle").text("Human VS Human");
 		} else if (!p.originalGame.player1Human || !p.originalGame.player2Human) {
-			$("#stats-subtitle").text("AI VS Human");
-		} else {
 			$("#stats-subtitle").text("Simulation");
+		} else {
+			$("#stats-subtitle").text("AI VS Human");
 		}
 		$("#stats-score1").text("Player1 Score: " + p.originalGame.state.playerScore(1));
 		$("#stats-score2").text("Player2 Score: " + p.originalGame.state.playerScore(2));
