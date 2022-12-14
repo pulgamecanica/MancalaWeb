@@ -273,11 +273,11 @@ $(document).ready(function() {
 
 		cleanBoard() {
 			this.PLAYER_1_PITS.forEach((pit, i) => {
-				this.board['1'] += self.board[pit];
+				this.board['1'].addGrains(this.board[pit].totalGrains())
 				this.board[pit].takeGrains();
 			});
 			this.PLAYER_2_PITS.forEach((pit, i) => {
-				this.board['2'] += self.board[pit];
+				this.board['2'].addGrains(this.board[pit].totalGrains())
 				this.board[pit].takeGrains();
 			});
 		}
@@ -312,13 +312,15 @@ $(document).ready(function() {
 	}
 
 	class Game {
-		constructor(playerStarting = 1) {
+		constructor(player1Human = true, player2Human = true, playerStarting = 1) {
 			this.state = new Mancala();
 			this.playerTurn = playerStarting;
+			this.player1Human = player1Human;
+			this.player2Human = player2Human;
 		}
 
 		gameOver() {
-			let finished = this.state.seedsLeft(1) == 0 || this.state.seedsLeft(2) == 0
+			let finished = this.state.seedsLeft(1) == 0 || this.state.seedsLeft(2) == 0;
 			if (finished) {
 				this.state.cleanBoard();
 			}
@@ -329,9 +331,9 @@ $(document).ready(function() {
 			if (!this.gameOver())
 				return null;
 			if (this.state.playerScore(1) > this.state.playerScore(2)) {
-				return {1: this.state.playerScore(1)}
+				return {player: 1, score: this.state.playerScore(1)}
 			} else {
-				return {2: this.state.playerScore(2)}
+				return {player: 2, score: this.state.playerScore(2)}
 			}
 		}
 
@@ -350,71 +352,255 @@ $(document).ready(function() {
 		update() {
 			this.state.update(this.playerTurn);
 		}
+
+		turnTypeHuman() {
+			if (this.playerTurn == "1") {
+				return this.player1Human;
+			} else {
+				return this.player2Human;
+			}
+		}
 	}
 
-	const game = new Game();
+	class Play {
+		constructor(player1Human = true, player2Human = true) {
+			this.originalGame = new Game(player1Human, player2Human);
+		}
+
+		negaMaxAlphaBetaPruning(game, player, depth, alpha, beta) {
+			var _, bestPit, bestValue, child_game, value;
+			if (game.gameOver() || depth === 1) {
+			  bestValue = game.evaluate();
+			  bestPit = null;
+
+			  if (player === Play.HUMAN) {
+			    bestValue = -bestValue;
+			  }
+
+			  return [bestValue, bestPit];
+			}
+			bestValue = -Infinity;
+			bestPit = null;
+			for (var pit, _pj_c = 0, _pj_a = game.possibleMoves(), _pj_b = _pj_a.length; _pj_c < _pj_b; _pj_c += 1) {
+			  pit = _pj_a[_pj_c];
+			  child_game = new Game({...game});
+			  child_game.doMove(pit);
+			  [value, _] = this.negaMaxAlphaBetaPruning(child_game, -player, depth - 1, -beta, -alpha);
+			  value = -value;
+
+			  if (value > bestValue) {
+			    bestValue = value;
+			    bestPit = pit;
+			  }
+
+			  if (bestValue > alpha) {
+			    alpha = bestValue;
+			  }
+
+			  if (beta <= alpha) {
+			    break;
+			  }
+			}
+			return [bestValue, bestPit];
+		}
+
+		update(x, y) {
+			if (this.originalGame.turnTypeHuman() && x != null && y != null) {
+				let fosse = null;
+				this.originalGame.state.PLAYER_1_PITS.forEach((val, i) => {
+					if (this.originalGame.state.board[val].hoverCircle({x: x, y: y})) {
+						fosse = this.originalGame.state.board[val];
+					}
+				});
+				this.originalGame.state.PLAYER_2_PITS.forEach((val, i) => {
+					if (this.originalGame.state.board[val].hoverCircle({x: x, y: y})) {
+						fosse = this.originalGame.state.board[val];
+					}
+				});
+				if (fosse) {
+					let turn = this.originalGame.doMove(fosse.id)
+					if (turn != null) {
+						this.originalGame.playerTurn = turn;
+					}
+				}
+			} else if (!this.originalGame.turnTypeHuman()) {
+				let computedAI = this.negaMaxAlphaBetaPruning(this.originalGame, false, 8, -Infinity, Infinity)
+				this.originalGame.state.board[computedAI[1]].color = "red";
+				let turn = this.originalGame.doMove(computedAI[1])
+				if (turn != null) {
+					this.originalGame.playerTurn = turn;
+				}
+			}
+		}
+	}
+
+	/* LOGIC ENDS, START PLAY */
+	let p = new Play();
 	let num_grains = null;
+
 	canvas.onmousemove = function(e) {
+		if (!p)
+			return;
 		let rect = this.getBoundingClientRect(),
 			x = e.clientX - rect.left,
 			y = e.clientY - rect.top;
 		num_grains = null;
-		game.state.PLAYER_1_PITS.forEach((val, i) => {
-			if (game.state.board[val].hoverCircle({x: x, y: y})) {
-				game.state.board[val].color = 'pink';
-				num_grains = val + " : " + game.state.board[val].totalGrains();
+		p.originalGame.state.PLAYER_1_PITS.forEach((val, i) => {
+			if (p.originalGame.state.board[val].hoverCircle({x: x, y: y})) {
+				p.originalGame.state.board[val].color = 'pink';
+				num_grains = val + " : " + p.originalGame.state.board[val].totalGrains();
 			} else {
-				game.state.board[val].color = 'lightblue';
+				p.originalGame.state.board[val].color = 'lightblue';
 			}
 		});
-		game.state.PLAYER_2_PITS.forEach((val, i) => {
-			if (game.state.board[val].hoverCircle({x: x, y: y})) {
-				game.state.board[val].color = 'pink';
-				num_grains = val + " : " + game.state.board[val].totalGrains();
+		p.originalGame.state.PLAYER_2_PITS.forEach((val, i) => {
+			if (p.originalGame.state.board[val].hoverCircle({x: x, y: y})) {
+				p.originalGame.state.board[val].color = 'pink';
+				num_grains = val + " : " + p.originalGame.state.board[val].totalGrains();
 			} else {
-				game.state.board[val].color = 'lightblue';
+				p.originalGame.state.board[val].color = 'lightblue';
 			}
 		});
 	};
 
 	canvas.onclick = function(e) {
-		let rect = this.getBoundingClientRect(),
-			x = e.clientX - rect.left,
-			y = e.clientY - rect.top;
-		let fosse = null;
-		game.state.PLAYER_1_PITS.forEach((val, i) => {
-			if (game.state.board[val].hoverCircle({x: x, y: y})) {
-				fosse = game.state.board[val];
-			}
-		});
-		game.state.PLAYER_2_PITS.forEach((val, i) => {
-			if (game.state.board[val].hoverCircle({x: x, y: y})) {
-				fosse = game.state.board[val];
-			}
-		});
-		if (fosse) {
-			let turn = game.doMove(fosse.id)
-			if (turn != null) {
-				game.playerTurn = turn;
-			}
+		if (p.originalGame.turnTypeHuman() && !p.originalGame.gameOver()) {
+			let rect = this.getBoundingClientRect(),
+				x = e.clientX - rect.left,
+				y = e.clientY - rect.top;
+			p.update(x, y);
 		}
-
 	};
 
 	function guide() {
 		if (num_grains) {
 			c.font = "30px Arial";
-			c.fillStyle = "red";
+			c.fillStyle = "primary";
 			c.textAlign = "center";
 			c.fillText("" + num_grains, canvas.width/2, canvas.height/2);
 		}
 	}
 
+	function generateStats() {
+		const stats = $("<div id='game-stats' class='m-auto p-3'></div>")
+		const card = $("<div class='card bg-dark' style='width: 18rem;'>\
+				<div class='card-body'>\
+				<h5 class='card-title' id='stats-title'></h5>\
+				<h6 class='card-subtitle mb-2 text-muted' id='stats-subtitle'></h6>\
+				<p class='card-text' id='stats-score1'></p>\
+				<p class='card-text' id='stats-score2'></p>\
+				<button class='btn btn-primary p-3 m-auto' id='play-again-button'>Play Again</button>\
+			</div></div>");
+		const close = $("<svg width='24px' height='24px' viewBox='0 0 24 24' id='close-stats' fill='white'><path fill-rule='evenodd' clip-rule='evenodd' d='M4.22676 4.22676C4.5291 3.92441 5.01929 3.92441 5.32163 4.22676L12 10.9051L18.6784 4.22676C18.9807 3.92441 19.4709 3.92441 19.7732 4.22676C20.0756 4.5291 20.0756 5.01929 19.7732 5.32163L13.0949 12L19.7732 18.6784C20.0756 18.9807 20.0756 19.4709 19.7732 19.7732C19.4709 20.0756 18.9807 20.0756 18.6784 19.7732L12 13.0949L5.32163 19.7732C5.01929 20.0756 4.5291 20.0756 4.22676 19.7732C3.92441 19.4709 3.92441 18.9807 4.22676 18.6784L10.9051 12L4.22676 5.32163C3.92441 5.01929 3.92441 4.5291 4.22676 4.22676Z'/></svg>");
+		close.css("position", "absolute");
+		close.css("cursor", "pointer");
+		close.css("top", "24px");
+		close.css("right", "24px");
+		close.on("click", function() {hideStats()});
+		stats.append(card);
+		stats.append(close);
+		stats.css("position", "absolute");
+		stats.css("top", "50%");
+		stats.css("left", "50%");
+		stats.css("transform", "translate(-50%, -50%)");
+		stats.css("display", "none");
+		$("#container-game").append(stats);
+	}
+
+	function updateStats(p) {
+		if (p.originalGame.gameOver()) {
+			$('#close-stats').css("display", "none");
+			$("#stats-title").text("🏆 Winner Player " + p.originalGame.findWinner().player);
+		} else {
+			$('#close-stats').css("display", "block");
+			$("#stats-title").text("No Contest!");
+		}
+		if (p.originalGame.player1Human && p.originalGame.player1Human) {
+			$("#stats-subtitle").text("Human VS Human");
+		} else if (!p.originalGame.player1Human || !p.originalGame.player1Human) {
+			$("#stats-subtitle").text("AI VS Human");
+		} else {
+			$("#stats-subtitle").text("Simulation");
+		}
+		$("#stats-score1").text("Player1 Score: " + p.originalGame.state.playerScore(1));
+		$("#stats-score2").text("Player2 Score: " + p.originalGame.state.playerScore(2));
+	}
+
+	function showStats(p) {
+		if ($("#game-stats").css("display") == "none") {
+			$("#game-stats").css("display", "block");
+			updateStats(p)
+		}
+	}
+
+	function hideStats() {
+		if ($("#game-stats").css("display") != "none") {
+			$("#game-stats").css("display", "none");
+		}
+	}
+
+	function playVS() {
+		p = new Play(true, true);
+		hideStats();
+	}
+
+	function playAI() {
+		p = new Play(true, false);
+		hideStats();
+	}
+
+	function playSimulation() {
+		p = new Play(false, false);
+		hideStats();
+	}
+
+	function initialize() {
+		generateStats();
+		const statsInfo = $("<svg x='0px' y='0px'\
+			viewBox='0 0 330 330' style='enable-background:new 0 0 330 330;' xml:space='preserve'>\
+			<path d='M165,0.008C74.019,0.008,0,74.024,0,164.999c0,90.977,74.019,164.992,165,164.992s165-74.015,165-164.992 C330,74.024,255.981,0.008,165,0.008z M165,299.992c-74.439,0-135-60.557-135-134.992S90.561,30.008,165,30.008 s135,60.557,135,134.991C300,239.436,239.439,299.992,165,299.992z'/>\
+			<path d='M165,130.008c-8.284,0-15,6.716-15,15v99.983c0,8.284,6.716,15,15,15s15-6.716,15-15v-99.983 C180,136.725,173.284,130.008,165,130.008z'/>\
+			<path d='M165,70.011c-3.95,0-7.811,1.6-10.61,4.39c-2.79,2.79-4.39,6.66-4.39,10.61s1.6,7.81,4.39,10.61 c2.79,2.79,6.66,4.39,10.61,4.39s7.81-1.6,10.609-4.39c2.79-2.8,4.391-6.66,4.391-10.61s-1.601-7.82-4.391-10.61 C172.81,71.61,168.95,70.011,165,70.011z'/>\
+		</svg>");
+		statsInfo.on("click", function() {showStats(p)});
+		statsInfo.css("position", "absolute");
+		statsInfo.css("fill", "rgb(25, 122, 242)");
+		statsInfo.css("width", "25px");
+		statsInfo.css("height", "25px");
+		statsInfo.css("top", "25px");
+		statsInfo.css("right", "25px");
+		statsInfo.css("cursor", "pointer");
+		$("#container-game").append(statsInfo);
+		$('#game-vs').on("click", function() {
+			playVS();
+			$("#play-again-button").on("click", function() {playVS()});
+	    });
+	    $('#game-solo').on("click", function() {
+	      	playAI();
+			$("#play-again-button").on("click", function() {playAI()});
+	    });
+	    $('#game-simulation').on("click", function() {
+	    	playSimulation();
+			$("#play-again-button").on("click", function() {playSimulation()});
+	    });
+	}
+
+	initialize();
+
 	function animate() {
-		window.requestAnimationFrame(animate);
-		c.clearRect(0, 0, canvas.width, canvas.height);
-		game.update();
-		guide();
+		if (p != null) {
+			window.requestAnimationFrame(animate);
+			c.clearRect(0, 0, canvas.width, canvas.height);
+			p.originalGame.update();
+			updateStats(p)
+			guide();
+			if (!p.originalGame.gameOver() && !p.originalGame.turnTypeHuman()) {
+				p.update(null, null);
+			}
+			if (p.originalGame.gameOver()) {
+				showStats(p);
+			}
+		}
 	}
 	animate();
 });
