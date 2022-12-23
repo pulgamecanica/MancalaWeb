@@ -62,14 +62,13 @@ $(document).ready(function() {
 	};
 
 	class Fosse extends Circle {
-		constructor(center, id, color = 'lightblue') {
+		constructor(center, id, graines = 4, color = 'lightblue') {
 			super(center, FOSSE_SIZE, color, true);
 			this.id = id;
 			this.graines = new Array();
-			this.addGrain();
-			this.addGrain();
-			this.addGrain();
-			this.addGrain();
+			for (let i = 0; i < graines; i += 1) {
+				this.addGrain();
+			}
 		}
 
 		addGrain() {
@@ -164,6 +163,18 @@ $(document).ready(function() {
 	        this.order = "ABCDEF1LKJIHG2";
 	        this.PLAYER_1_PITS = ['A', 'B', 'C', 'D', 'E', 'F'];
 	        this.PLAYER_2_PITS = ['G', 'H', 'I', 'J', 'K', 'L'];
+        }
+
+        deepCopy() {
+        	const newMancala = new Mancala();
+        	for (const [key, value] of Object.entries(this.board)) {
+        		if (key != 1 && key != 2) {
+					newMancala.board[key] = new Fosse({x: 0, y: 0}, key, value.totalGrains());
+				}
+			}
+			newMancala.board['1'].addGrains(this.board['1']);
+			newMancala.board['2'].addGrains(this.board['2']);
+        	return newMancala;
         }
 
         checkValidPit(playerTurn, pit) {
@@ -319,6 +330,13 @@ $(document).ready(function() {
 			this.player2Human = player2Human;
 		}
 
+		deepCopy() {
+			const newGame = new Game(this.player1Human, this.player2Human, this.playerStarting);
+			newGame.playerTurn = this.playerTurn;
+			newGame.state = this.state.deepCopy();
+			return newGame;
+		}
+
 		gameOver() {
 			let finished = this.state.seedsLeft(1) == 0 || this.state.seedsLeft(2) == 0;
 			if (finished) {
@@ -369,22 +387,25 @@ $(document).ready(function() {
 
 		negaMaxAlphaBetaPruning(game, player, depth, alpha, beta) {
 			var _, bestPit, bestValue, child_game, value;
+			// console.log(depth + game.possibleMoves());
 			if (game.gameOver() || depth === 1) {
 			  bestValue = game.evaluate();
 			  bestPit = null;
 
-			  if (player === Play.HUMAN) {
-			    bestValue = -bestValue;
+			  if (player === true) {
+			    bestValue = bestValue * -1;
 			  }
-
 			  return [bestValue, bestPit];
 			}
 			bestValue = -Infinity;
 			bestPit = null;
 			for (var pit, _pj_c = 0, _pj_a = game.possibleMoves(), _pj_b = _pj_a.length; _pj_c < _pj_b; _pj_c += 1) {
 			  pit = _pj_a[_pj_c];
-			  child_game = new Game({...game});
-			  child_game.doMove(pit);
+			  child_game = game.deepCopy();
+			  let turn = child_game.doMove(pit);
+			  if (turn != null) {
+			    child_game.playerTurn = turn;
+			  }
 			  [value, _] = this.negaMaxAlphaBetaPruning(child_game, -player, depth - 1, -beta, -alpha);
 			  value = -value;
 
@@ -421,7 +442,8 @@ $(document).ready(function() {
 			} else if (!this.originalGame.turnTypeHuman()) {
 				let computedAI = this.negaMaxAlphaBetaPruning(this.originalGame, false, 8, -Infinity, Infinity)
 				this.originalGame.state.board[computedAI[1]].color = "red";
-				let turn = this.originalGame.doMove(computedAI[1])
+				let turn = this.originalGame.doMove(computedAI[1]);
+				// alert("Coputer choose: " + computedAI);
 				if (turn != null) {
 					this.originalGame.playerTurn = turn;
 				}
