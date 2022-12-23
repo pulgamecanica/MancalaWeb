@@ -18,7 +18,7 @@
 	<script src="./mancala.js"></script>
 </head>
 <body class="bg-dark">
-
+<div id="dialogs"></div>
 <div class="container-background">
 	<!--- Welcome Section -->
 	<div class="container-fluid padding">
@@ -35,6 +35,21 @@
 	</div>
 	<!--- Three Column Section -->
 	<div class="container-fluid padding">
+		<span id="optionsPannel" class="animate__animated animate__zoomInRight" style="padding: 2rem 4rem;">
+			<svg id="closeOptionsPannel" viewBox="0 0 512 512" class="btn">
+				<path d="M177.5 98c-8.8-3.8-19-2-26 4.6l-144 136C2.7 243.1 0 249.4 0 256s2.7 12.9 7.5 17.4l144 136c7 6.6 17.2 8.4 26 4.6s14.5-12.5 14.5-22l0-88 288 0c17.7 0 32-14.3 32-32l0-32c0-17.7-14.3-32-32-32l-288 0 0-88c0-9.6-5.7-18.2-14.5-22z"/>
+			</svg>
+			<h2>Choose IA difficulty</h2>
+			<input id="difficultyRange" type="range" name="rangeInput" value="2" min="2" max="10" onchange="updateTextInput(this.value);">
+			<span id="difficultySvg"></span>
+			<h2>Choose starting player</h2>
+			<span>
+				<input style="display: inline-block" type="radio" name = "playerTurn" id="player1" value="1" checked> <label for="player1"> Player1 </label>
+				<input style="display: inline-block" type="radio" name = "playerTurn" id="player2" value="2"> <label for="player2">Player2 </label> <br>
+				<button id="startButton" style="width: 100px; height: 100px; background-color: transparent; border: none; cursor: pointer; background-image: url('./img/start-button.png'); background-size: cover; background-repeat: no-repeat; background-position: center;">
+				</button>
+			</span>
+		</span>
 		<div class="row text-center padding animate__animated animate__backInLeft" id="game-options">
 			<div class="col-xs-12 col-sm-6 col-md-4">
 				<button class="svg-play-button" id="game-vs">

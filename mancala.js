@@ -140,6 +140,10 @@ $(document).ready(function() {
 		score() {
 			return this.graines.length;
 		}
+
+		totalGrains() {
+			return this.score();
+		}
 	};
 
 	class Mancala {
@@ -172,9 +176,17 @@ $(document).ready(function() {
 					newMancala.board[key] = new Fosse({x: 0, y: 0}, key, value.totalGrains());
 				}
 			}
-			newMancala.board['1'].addGrains(this.board['1']);
-			newMancala.board['2'].addGrains(this.board['2']);
+			newMancala.board['1'].addGrains(this.board['1'].totalGrains());
+			newMancala.board['2'].addGrains(this.board['2'].totalGrains());
         	return newMancala;
+        }
+
+        show() {
+        	let map = {};
+        	for (const [key, value] of Object.entries(this.board)) {
+        		map[key] = value.totalGrains();
+			}
+        	return map;
         }
 
         checkValidPit(playerTurn, pit) {
@@ -381,18 +393,17 @@ $(document).ready(function() {
 	}
 
 	class Play {
-		constructor(player1Human = true, player2Human = true) {
-			this.originalGame = new Game(player1Human, player2Human);
+		constructor(player1Human = true, player2Human = true, playerStarting = 1) {
+			this.originalGame = new Game(player1Human, player2Human, playerStarting);
 		}
 
-		negaMaxAlphaBetaPruning(game, player, depth, alpha, beta) {
+		negaMaxAlphaBetaPruning(game, player, depth, alpha, beta, last_played = null) {
 			var _, bestPit, bestValue, child_game, value;
-			// console.log(depth + game.possibleMoves());
 			if (game.gameOver() || depth === 1) {
 			  bestValue = game.evaluate();
 			  bestPit = null;
 
-			  if (player === true) {
+			  if (game.playerTurn === true) {
 			    bestValue = bestValue * -1;
 			  }
 			  return [bestValue, bestPit];
@@ -406,8 +417,11 @@ $(document).ready(function() {
 			  if (turn != null) {
 			    child_game.playerTurn = turn;
 			  }
-			  [value, _] = this.negaMaxAlphaBetaPruning(child_game, -player, depth - 1, -beta, -alpha);
-			  value = -value;
+			  // console.log("(" + depth + ")" + "Played: " + pit, " | Turn: " + turn + ' | Last Played: ' + last_played);
+			  // console.log(child_game.state.show());
+			  [value, _] = this.negaMaxAlphaBetaPruning(child_game, -player, depth - 1, -beta, -alpha, pit);
+			  // console.log("Pit: " + pit, " | Evaluated: " + value);
+			  value = value * -1;
 
 			  if (value > bestValue) {
 			    bestValue = value;
@@ -423,6 +437,7 @@ $(document).ready(function() {
 			  }
 			}
 			return [bestValue, bestPit];
+
 		}
 
 		update(x, y) {
@@ -435,15 +450,20 @@ $(document).ready(function() {
 				});
 				if (fosse != null) {
 					let turn = this.originalGame.doMove(fosse.id)
+					const stats = $("<p>[Player " + this.originalGame.playerTurn + "] " + fosse.id + "</p>");
+					$('#dialogs').append(stats);
+					$('#dialogs').scrollTop($('#dialogs')[0].scrollHeight);
 					if (turn != null) {
 						this.originalGame.playerTurn = turn;
 					}
 				}
 			} else if (!this.originalGame.turnTypeHuman()) {
-				let computedAI = this.negaMaxAlphaBetaPruning(this.originalGame, false, 8, -Infinity, Infinity)
+				let computedAI = this.negaMaxAlphaBetaPruning(this.originalGame, true, parseInt($("#difficultyRange").val()), -Infinity, Infinity)
 				this.originalGame.state.board[computedAI[1]].color = "red";
 				let turn = this.originalGame.doMove(computedAI[1]);
-				// alert("Coputer choose: " + computedAI);
+				const stats = $("<p>[Player " + this.originalGame.playerTurn + "] " + computedAI + "</p>");
+				$('#dialogs').append(stats);
+				$('#dialogs').scrollTop($('#dialogs')[0].scrollHeight);
 				if (turn != null) {
 					this.originalGame.playerTurn = turn;
 				}
@@ -554,6 +574,7 @@ $(document).ready(function() {
 		if ($("#game-stats").css("display") != "none") {
 			$("#game-stats").css("display", "none");
 		}
+		$('#dialogs').empty();
 	}
 
 	function playVS() {
@@ -562,12 +583,20 @@ $(document).ready(function() {
 	}
 
 	function playAI() {
-		p = new Play(true, false);
+		let playerStarting = parseInt($('input[name="playerTurn"]:checked').val());
+		if (playerStarting != 1 && playerStarting != 2) {
+			playerStarting = 2;
+		}
+		p = new Play(false, true, playerStarting);
 		hideStats();
 	}
 
 	function playSimulation() {
-		p = new Play(false, false);
+		let playerStarting = parseInt($('input[name="playerTurn"]:checked').val());
+		if (playerStarting != 1 && playerStarting != 2) {
+			playerStarting = 2;
+		}
+		p = new Play(false, false, playerStarting);
 		hideStats();
 	}
 
@@ -592,13 +621,14 @@ $(document).ready(function() {
 			playVS();
 			$("#play-again-button").on("click", function() {playVS()});
 	    });
-	    $('#game-solo').on("click", function() {
-	      	playAI();
-			$("#play-again-button").on("click", function() {playAI()});
-	    });
-	    $('#game-simulation').on("click", function() {
-	    	playSimulation();
-			$("#play-again-button").on("click", function() {playSimulation()});
+	    $('#startButton').on("click", function() {
+			if ($("#startButton").data("gameType") == 2) {
+				playAI();
+				$("#play-again-button").on("click", function() {playAI()});
+			} else if ($("#startButton").data("gameType") == 3) {
+				playSimulation();
+				$("#play-again-button").on("click", function() {playSimulation()});
+			}
 	    });
 	}
 
